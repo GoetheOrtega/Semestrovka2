@@ -1,24 +1,41 @@
 package com.example.semestrovka2.model;
 
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Date;
+import java.util.List;
+
+
+
+@Entity
+@Table(name = "ordenes")
 public class Orden {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String numero;
     private Date fechaCreacion;
-    private Date fecharecibida;
+    private Date fechaRecibida;
 
     private double total;
 
-    @Override
-    public String toString() {
-        return "Orden{" +
-                "id=" + id +
-                ", numero='" + numero + '\'' +
-                ", fechaCreacion=" + fechaCreacion +
-                ", fecharecibida=" + fecharecibida +
-                ", total=" + total +
-                '}';
+    @ManyToOne
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "orden")
+    private List<DetalleOrden> detalle;
+
+    public Orden() {
+
+    }
+
+    public Orden(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
+        super();
+        this.id = id;
+        this.numero = numero;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaRecibida = fechaRecibida;
+        this.total = total;
     }
 
     public Integer getId() {
@@ -45,12 +62,12 @@ public class Orden {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Date getFecharecibida() {
-        return fecharecibida;
+    public Date getFechaRecibida() {
+        return fechaRecibida;
     }
 
-    public void setFecharecibida(Date fecharecibida) {
-        this.fecharecibida = fecharecibida;
+    public void setFechaRecibida(Date fechaRecibida) {
+        this.fechaRecibida = fechaRecibida;
     }
 
     public double getTotal() {
@@ -61,16 +78,29 @@ public class Orden {
         this.total = total;
     }
 
-    public Orden(Integer id, String numero, Date fechaCreacion, Date fecharecibida, double total) {
-        this.id = id;
-        this.numero = numero;
-        this.fechaCreacion = fechaCreacion;
-        this.fecharecibida = fecharecibida;
-        this.total = total;
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public Orden(){
-
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
+
+
+    public List<DetalleOrden> getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(List<DetalleOrden> detalle) {
+        this.detalle = detalle;
+    }
+
+    @Override
+    public String toString() {
+        return "Orden [id=" + id + ", numero=" + numero + ", fechaCreacion=" + fechaCreacion + ", fechaRecibida="
+                + fechaRecibida + ", total=" + total + "]";
+    }
+
 
 }

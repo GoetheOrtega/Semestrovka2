@@ -1,12 +1,40 @@
 package com.example.semestrovka2.model;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "productos")
 public class Producto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
-    private String description;
+    private String descripcion;
     private String imagen;
-    private String precio;
-    private String cantidad;
+    private double precio;
+    private int cantidad;
+
+    @ManyToOne
+    private Usuario usuario;
+
+    public Producto() {
+
+    }
+
+
+    public Producto(Integer id, String nombre, String descripcion, String imagen, double precio, int cantidad,
+                    Usuario usuario) {
+        super();
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.precio = precio;
+        this.cantidad = cantidad;
+        this.usuario = usuario;
+    }
+
 
 
     public Integer getId() {
@@ -25,12 +53,12 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getImagen() {
@@ -41,35 +69,37 @@ public class Producto {
         this.imagen = imagen;
     }
 
-    public String getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
-    public String getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
-    public String toString(){
-        return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + description + ", imagen=" + imagen
+    public String toString() {
+        return "Producto [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen
                 + ", precio=" + precio + ", cantidad=" + cantidad + "]";
     }
-    public Producto(){
 
-    }
-    public Producto(Integer id, String nombre, String description, String imagen, String precio, String cantidad) {
-        this.id = id;
-        this.nombre = nombre;
-        this.description = description;
-        this.imagen = imagen;
-        this.precio = precio;
-        this.cantidad = cantidad;
-    }
+
 }
