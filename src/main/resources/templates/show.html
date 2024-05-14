@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Spring eCommerce</title>
+  <!-- Bootstrap core CSS -->
+  <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link th:href="@{css/heroic-features.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation -->
+<div th:include="admin.html::header"></div>
+<!-- Page Content -->
+<div class="container">
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">
+    Spring eCommerce <small>Productos</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item active">Ver Productos</li>
+  </ol>
+  <a class="btn btn-primary" th:href="@{/productos/create}"> Crear Producto</a>
+  <h2>Productos</h2>
+  <table class="table" id="productosTable">
+    <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descripción</th>
+      <th scope="col">Inventario</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Acción</th>
+      <th scope="col">Acción</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="producto : ${productos}">
+      <td th:text="${producto.nombre}"></td>
+      <td th:text="${producto.descripcion}"></td>
+      <td th:text="${producto.cantidad}"></td>
+      <td th:text="${producto.precio}"></td>
+      <td><a class="btn btn-warning" th:href="@{productos/edit/{id} (id=${producto.id})}">Editar</a> </td>
+      <td><a class="btn btn-danger" th:href="@{productos/delete/{id} (id=${producto.id})}">Eliminar</a> </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!-- /.container -->
+<div th:include="admin.html::footer"></div>
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script>
+  // Ordenar la tabla por el primer columna (Nombre) al cargar la página
+  window.onload = function () {
+    sortTable();
+  };
+
+  function sortTable() {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("productosTable");
+    switching = true;
+    while (switching) {
+      switching = false;
+      rows = table.getElementsByTagName("TR");
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[0];
+        y = rows[i + 1].getElementsByTagName("TD")[0];
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+  }
+</script>
+</body>
+</html>
