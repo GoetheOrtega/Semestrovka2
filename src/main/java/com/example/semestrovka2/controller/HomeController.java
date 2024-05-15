@@ -3,6 +3,10 @@ package com.example.semestrovka2.controller;
 import com.example.semestrovka2.model.DetalleOrden;
 import com.example.semestrovka2.model.Orden;
 import com.example.semestrovka2.model.Producto;
+import com.example.semestrovka2.model.Usuario;
+import com.example.semestrovka2.service.DetalleOrdenService;
+import com.example.semestrovka2.service.IUsuarioService;
+import com.example.semestrovka2.service.OrdenService;
 import com.example.semestrovka2.service.ProductoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +28,12 @@ public class HomeController {
 
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private IUsuarioService usuarioService;
+    @Autowired
+    private OrdenService ordenService;
+    @Autowired
+    private DetalleOrdenService detalleOrdenService;
     // almacena los detalles de la orden en el carrito
     List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
     // guarda los datos de la orden
@@ -110,5 +121,34 @@ public class HomeController {
         model.addAttribute("cart", detalles);
         model.addAttribute("orden", orden);
         return "usuario/carrito";
+    }
+    @GetMapping("/order")
+    public String order(Model model){
+
+        Usuario usuario = usuarioService.findById(1).get();
+        model.addAttribute("cart", detalles);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
+        return "usuario/resumenorden";
+    }
+    @GetMapping("/saveOrder")
+    public String saveOrder(){
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generarNumeroOrden());
+        // user
+        Usuario usuario = usuarioService.findById(1).get();
+        orden.setUsuario(usuario);
+        ordenService.save(orden);
+        //guardar detalles
+        for (DetalleOrden dt: detalles){
+            dt.setOrden(orden);
+            detalleOrdenService.save(dt);
+        }
+        //limpiarvalores lista e orden
+        orden = new Orden();
+        detalles.clear();
+
+        return "redirect:/";
     }
 }
