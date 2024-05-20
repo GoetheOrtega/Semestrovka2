@@ -1,12 +1,14 @@
 package com.example.semestrovka2.service;
 
 import com.example.semestrovka2.model.Orden;
+import com.example.semestrovka2.model.Usuario;
 import com.example.semestrovka2.repository.OrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrdenServiceImpl implements OrdenService{
@@ -42,5 +44,15 @@ public class OrdenServiceImpl implements OrdenService{
         numeroConcatenado = "0000000"+ String.valueOf(numero);
     }
         return numeroConcatenado;
+    }
+
+    @Override
+    public List<Orden> findByUsuario(Usuario usuario) {
+        return ordenRepository.findByUsuario(usuario);
+    }
+
+    @Override
+    public Optional<Orden> findById(Integer id) {
+        return ordenRepository.findById(id);
     }
 }

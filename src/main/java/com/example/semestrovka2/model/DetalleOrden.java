@@ -1,6 +1,7 @@
 package com.example.semestrovka2.model;
 
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "detalles")

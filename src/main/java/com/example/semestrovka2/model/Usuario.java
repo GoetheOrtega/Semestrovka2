@@ -1,7 +1,8 @@
 package com.example.semestrovka2.model;
 
-import jakarta.persistence.*;
 
+
+import javax.persistence.*;
 import java.util.List;
 
 

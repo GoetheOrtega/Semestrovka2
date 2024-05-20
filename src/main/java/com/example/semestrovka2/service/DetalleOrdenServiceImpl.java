@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DetalleOrdenServiceImpl implements DetalleOrdenService {
+
     @Autowired
     private DetalleOrdenRepository detalleOrdenRepository;
     @Override

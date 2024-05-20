@@ -1,14 +1,17 @@
 package com.example.semestrovka2.service;
 
+import com.example.semestrovka2.model.Orden;
 import com.example.semestrovka2.model.Usuario;
+import com.example.semestrovka2.repository.OrdenRepository;
 import com.example.semestrovka2.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioServiceImpl implements IUsuarioService{
+public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -27,5 +30,11 @@ public class UsuarioServiceImpl implements IUsuarioService{
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
+
+    @Override
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();
+    }
+
 }
 
