@@ -2,9 +2,11 @@ package com.example.semestrovka2.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.example.semestrovka2.model.Orden;
 import com.example.semestrovka2.model.Usuario;
+import com.example.semestrovka2.service.EmailService;
 import com.example.semestrovka2.service.IUsuarioService;
 import com.example.semestrovka2.service.OrdenService;
 
@@ -14,17 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final Logger logger= LoggerFactory.getLogger(UsuarioController.class);
+    private final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     @Autowired
     private IUsuarioService usuarioService;
@@ -32,7 +33,10 @@ public class UsuarioController {
     @Autowired
     private OrdenService ordenService;
 
-    BCryptPasswordEncoder passEncode= new BCryptPasswordEncoder();
+    @Autowired
+    private EmailService emailService; // Añadir el servicio de correo electrónico
+
+    BCryptPasswordEncoder passEncode = new BCryptPasswordEncoder();
 
     @GetMapping("/registro")
     public String create() {
@@ -44,8 +48,31 @@ public class UsuarioController {
         logger.info("Usuario registro: {}", usuario);
         usuario.setTipo("USER");
         usuario.setPassword(passEncode.encode(usuario.getPassword()));
+
+        // Generar y establecer el token de confirmación
+        String token = UUID.randomUUID().toString();
+        usuario.setConfirmationToken(token);
+        usuario.setRegistrado(false); // Marcar al usuario como no registrado
+
         usuarioService.save(usuario);
+
+        // Enviar correo electrónico de confirmación
+        emailService.sendConfirmationEmail(usuario);
+
         return "redirect:/";
+    }
+
+    @GetMapping("/confirmarRegistro")
+    public String confirmRegistration(@RequestParam("token") String token) {
+        Optional<Usuario> usuario = usuarioService.findByConfirmationToken(token);
+        if (usuario.isPresent()) {
+            Usuario user = usuario.get();
+            user.setRegistrado(true);
+            usuarioService.save(user);
+            return "redirect:/usuario/registroConfirmado";
+        } else {
+            return "redirect:/usuario/registroFallido";
+        }
     }
 
     @GetMapping("/login")
@@ -98,5 +125,15 @@ public class UsuarioController {
     public String cerrarSesion(HttpSession session) {
         session.removeAttribute("idusuario");
         return "redirect:/";
+    }
+
+    @GetMapping("/registroConfirmado")
+    public String registroConfirmado() {
+        return "usuario/registroConfirmado";
+    }
+
+    @GetMapping("/registroFallido")
+    public String registroFallido() {
+        return "usuario/registroFallido";
     }
 }

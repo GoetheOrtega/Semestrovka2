@@ -32,6 +32,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
+    public Optional<Usuario> findByConfirmationToken(String token) {
+        return usuarioRepository.findByConfirmationToken(token);
+    }
+
+    @Override
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
