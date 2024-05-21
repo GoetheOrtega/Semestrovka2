@@ -1,6 +1,8 @@
 package com.example.semestrovka2.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +21,7 @@ public class Producto {
     private String imagen;
     private double precio;
     private int cantidad;
-
+    @JsonManagedReference
     @ManyToOne
     private Usuario usuario;
 

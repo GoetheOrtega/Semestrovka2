@@ -32,8 +32,8 @@ public class ProductoServiceImpl implements ProductoService {
         productoRepository.deleteById(id);
     }
 
-        @Override
-        public List<Producto> findAll() {
-            return productoRepository.findAll();
-        }
+    @Override
+    public List<Producto> findAll() {
+        return productoRepository.findAll();
+    }
 }
