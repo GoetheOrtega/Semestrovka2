@@ -86,9 +86,9 @@ public class UsuarioController {
         if (idUsuario != null) {
             Optional<Usuario> user = usuarioService.findById(idUsuario);
             if (user.isPresent()) {
-                if ("ADMIN".equals(user.get().getTipo())) {
+                if (user.get().isRegistrado() && "ADMIN".equals(user.get().getTipo())) {
                     return "redirect:/administrador";
-                } else {
+                } else if (user.get().isRegistrado()) {
                     return "redirect:/";
                 }
             } else {

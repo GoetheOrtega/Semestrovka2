@@ -1,47 +1,56 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
   <title>Spring eCommerce</title>
-
-
-  <!-- Bootstrap core CSS -->
-  <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link th:href="@{css/heroic-features.css}" rel="stylesheet">
-
+  <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
+  <style>
+    .breadcrumb {
+      background-color: #f8f9fa;
+    }
+    .page-header {
+      background-color: #343a40;
+      color: white;
+      padding: 20px 0;
+    }
+    .main-content {
+      margin-top: 40px; /* Ajusta este valor para más o menos espacio */
+    }
+    .table {
+      margin-top: 20px;
+    }
+    .pagination {
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .btn-primary {
+      margin-bottom: 20px;
+    }
+    .container {
+      max-width: 900px;
+    }
+  </style>
 </head>
 
 <body>
-
-<!-- Navigation -->
-<div th:include="administrador/admin.html::header" ></div>
-
-<!-- Page Content -->
-<div class="container">
-
-
-  <!-- Page Heading/Breadcrumbs -->
-  <h1 class="mt-4 mb-3">
-    Spring eCommerce <small>Productos</small>
-  </h1>
-
+<div th:include="administrador/admin.html::header"></div>
+<div class="container main-content">
+  <header class="page-header text-center">
+    <h1>Spring eCommerce</h1>
+    <p class="lead">Productos</p>
+  </header>
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item"><a th:href="@{/administrador}">Home</a></li>
     <li class="breadcrumb-item active">Ver Productos</li>
   </ol>
-
-  <a class="btn btn-primary" th:href="@{/productos/create}" > Crear Producto</a>
+  <a class="btn btn-primary" th:href="@{/productos/create}">Crear Producto</a>
   <h2>Productos</h2>
-  <table class="table">
-    <thead>
+  <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
     <tr>
       <th scope="col">Nombre</th>
       <th scope="col">Descripción</th>
@@ -52,25 +61,37 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="producto:${productos}">
+    <tr th:each="producto : ${productoPage.content}">
       <td th:text="${producto.nombre}"></td>
       <td th:text="${producto.descripcion}"></td>
       <td th:text="${producto.cantidad}"></td>
       <td th:text="${producto.precio}"></td>
-      <td><a  class="btn btn-warning" th:href="@{productos/edit/{id} (id=${producto.id}) }">Editar</a> </td>
-      <td><a  class="btn btn-danger" th:href="@{productos/delete/{id} (id=${producto.id}) }">Eliminar</a> </td>
+      <td><a class="btn btn-warning btn-sm" th:href="@{|/productos/edit/${producto.id}|}">Editar</a></td>
+      <td><a class="btn btn-danger btn-sm" th:href="@{|/productos/delete/${producto.id}|}">Eliminar</a></td>
     </tr>
     </tbody>
   </table>
-
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" th:classappend="${!productoPage.hasPrevious()} ? 'disabled'">
+        <a class="page-link" th:href="@{|/productos?page=${currentPage - 1}|}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item" th:each="i : ${#numbers.sequence(0, productoPage.totalPages - 1)}"
+          th:classappend="${i == currentPage} ? 'active'">
+        <a class="page-link" th:href="@{|/productos?page=${i}|}" th:text="${i + 1}">1</a>
+      </li>
+      <li class="page-item" th:classappend="${!productoPage.hasNext()} ? 'disabled'">
+        <a class="page-link" th:href="@{|/productos?page=${currentPage + 1}|}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
-<!-- /.container -->
-<div th:include="administrador/admin.html::footer" ></div>
-
-<!-- Bootstrap core JavaScript -->
-<script th:src="@{vendor/jquery/jquery.min.js}"></script>
-<script th:src="@{vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
+<div th:include="administrador/admin.html::footer"></div>
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
-
 </html>

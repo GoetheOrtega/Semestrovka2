@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,9 +43,13 @@ public class ProductoController {
     @Autowired
     private UploadFileService upload;
 
+
     @GetMapping("")
-    public String show(Model model) {
-        model.addAttribute("productos", productoService.findAll());
+    public String show(Model model, @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 1); // Mostrar solo un producto por página
+        Page<Producto> productoPage = productoService.findPaginated(pageable);
+        model.addAttribute("productoPage", productoPage);
+        model.addAttribute("currentPage", page);
         return "productos/show";
     }
 

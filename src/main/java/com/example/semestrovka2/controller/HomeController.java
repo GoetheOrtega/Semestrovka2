@@ -158,21 +158,13 @@ public class HomeController {
 
     @GetMapping("/order")
     public String order(Model model, HttpSession session) {
-        // Verificar si el usuario está autenticado
-        if (session.getAttribute("idusuario") == null) {
-            // Si no está autenticado, redirigir a la página de login
-            return "redirect:/usuario/login";
-        }
 
-        // Obtener el usuario autenticado
-        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).orElse(null);
+        Usuario usuario =usuarioService.findById( Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 
-        // Agregar los detalles de la orden al modelo
         model.addAttribute("cart", detalles);
         model.addAttribute("orden", orden);
         model.addAttribute("usuario", usuario);
 
-        // Mostrar la página de resumen de orden
         return "usuario/resumenorden";
     }
 

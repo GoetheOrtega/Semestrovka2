@@ -30,11 +30,15 @@ public class SpringBootSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/administrador/**").hasRole("ADMIN")
                 .antMatchers("/productos/**").hasRole("ADMIN")
                 .antMatchers("/images/**", "/css/**", "/vendor/**").permitAll() // Permitir acceso a recursos estáticos
+                .anyRequest().authenticated() // Todas las demás solicitudes requieren autenticación
                 .and()
                 .formLogin()
                 .loginPage("/usuario/login")
                 .permitAll()
-                .defaultSuccessUrl("/usuario/acceder");
+                .defaultSuccessUrl("/usuario/acceder")
+                .and()
+                .exceptionHandling() // Manejar excepciones personalizadas
+                .accessDeniedPage("/error-403"); // Página de error personalizada para acceso denegado
     }
 
     @Bean

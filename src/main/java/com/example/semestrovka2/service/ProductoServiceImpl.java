@@ -3,6 +3,9 @@ package com.example.semestrovka2.service;
 import com.example.semestrovka2.model.Producto;
 import com.example.semestrovka2.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +39,10 @@ public class ProductoServiceImpl implements ProductoService {
     public List<Producto> findAll() {
         return productoRepository.findAll();
     }
+    @Override
+    public Page<Producto> findPaginated(Pageable pageable) {
+        return productoRepository.findAll(pageable);
+
+    }
+
 }
