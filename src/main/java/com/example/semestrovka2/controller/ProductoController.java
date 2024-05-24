@@ -2,9 +2,7 @@ package com.example.semestrovka2.controller;
 
 import com.example.semestrovka2.model.Producto;
 import com.example.semestrovka2.model.Usuario;
-import com.example.semestrovka2.service.IUsuarioService;
-import com.example.semestrovka2.service.ProductoService;
-import com.example.semestrovka2.service.UploadFileService;
+import com.example.semestrovka2.service.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.slf4j.Logger;
@@ -42,7 +40,10 @@ public class ProductoController {
 
     @Autowired
     private UploadFileService upload;
-
+    @Autowired
+    private DetalleOrdenService detalleOrdenService;
+@Autowired
+private LikeService likeService;
 
     @GetMapping("")
     public String show(Model model, @RequestParam(defaultValue = "0") int page) {
@@ -105,13 +106,19 @@ public class ProductoController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         Producto p = productoService.get(id).orElse(new Producto());
+        likeService.deleteByProductoId(id);
 
-        // eliminar cuando no sea la imagen por defecto
+        // Eliminar todas las entradas en la tabla de detalles de orden asociadas con este producto
+        detalleOrdenService.deleteByProductoId(id);
+
+        // Eliminar la imagen del producto si no es la imagen por defecto
         if (!p.getImagen().equals("proyecto imagen sin cargar.png")) {
             upload.deleteImage(p.getImagen());
         }
 
+        // Eliminar el producto
         productoService.delete(id);
+
         return "redirect:/productos";
     }
     @JsonBackReference

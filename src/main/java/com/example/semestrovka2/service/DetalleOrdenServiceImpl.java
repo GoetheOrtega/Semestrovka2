@@ -15,4 +15,9 @@ public class DetalleOrdenServiceImpl implements DetalleOrdenService {
     public DetalleOrden save(DetalleOrden detalleOrden) {
         return detalleOrdenRepository.save(detalleOrden);
     }
+    @Override
+    public void deleteByProductoId(Integer productoId) {
+        detalleOrdenRepository.deleteByProductoId(productoId);
+    }
 }
+

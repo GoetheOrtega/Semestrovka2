@@ -27,17 +27,17 @@ public class SpringBootSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/administrador/**").hasRole("ADMIN")
-                .antMatchers("/productos/**").hasRole("ADMIN")
+                .antMatchers("/administrador/**", "/productos/**").hasRole("ADMIN") // Acceso solo para ADMIN a las rutas específicas
                 .antMatchers("/images/**", "/css/**", "/vendor/**").permitAll() // Permitir acceso a recursos estáticos
+                .antMatchers("/usuario/registro", "/usuario/save").permitAll() // Permitir acceso a la página de registro y guardar usuario
                 .anyRequest().authenticated() // Todas las demás solicitudes requieren autenticación
                 .and()
                 .formLogin()
-                .loginPage("/usuario/login")
-                .permitAll()
-                .defaultSuccessUrl("/usuario/acceder")
+                .loginPage("/usuario/login") // Página de inicio de sesión personalizada
+                .permitAll() // Permitir acceso a la página de inicio de sesión para todos
+                .defaultSuccessUrl("/usuario/acceder") // Redirigir después del inicio de sesión
                 .and()
-                .exceptionHandling() // Manejar excepciones personalizadas
+                .exceptionHandling()
                 .accessDeniedPage("/error-403"); // Página de error personalizada para acceso denegado
     }
 

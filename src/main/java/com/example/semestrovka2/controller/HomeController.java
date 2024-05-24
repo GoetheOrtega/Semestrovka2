@@ -4,10 +4,7 @@ import com.example.semestrovka2.model.DetalleOrden;
 import com.example.semestrovka2.model.Orden;
 import com.example.semestrovka2.model.Producto;
 import com.example.semestrovka2.model.Usuario;
-import com.example.semestrovka2.service.DetalleOrdenService;
-import com.example.semestrovka2.service.IUsuarioService;
-import com.example.semestrovka2.service.OrdenService;
-import com.example.semestrovka2.service.ProductoService;
+import com.example.semestrovka2.service.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +38,8 @@ public class HomeController {
 
     @Autowired
     private DetalleOrdenService detalleOrdenService;
+    @Autowired
+    private LikeService likeService;
 
     // para almacenar los detalles de la orden
     List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
@@ -50,12 +49,19 @@ public class HomeController {
 
     @GetMapping("")
     public String home(Model model, HttpSession session) {
-
         log.info("Sesion del usuario: {}", session.getAttribute("idusuario"));
 
         model.addAttribute("productos", productoService.findAll());
 
-        //session
+        // Obtener el id del usuario de la sesión
+        Integer userId = (Integer) session.getAttribute("idusuario");
+        if (userId != null) {
+            model.addAttribute("userId", userId);
+        } else {
+            model.addAttribute("userId", "null");
+        }
+
+        // session
         model.addAttribute("sesion", session.getAttribute("idusuario"));
 
         return "usuario/home";
@@ -201,5 +207,31 @@ public class HomeController {
         model.addAttribute("productos", productos);
         return "usuario/home";
     }
+    @PostMapping("/likes/{productId}")
+    @ResponseBody
+    public String likeProduct(@PathVariable Integer productId, HttpSession session) {
+        // Verificar si el usuario está autenticado
+        Integer userId = (Integer) session.getAttribute("idusuario");
+        if (userId == null) {
+            return "Usuario no autenticado";
+        }
+
+        Optional<Producto> productoOptional = productoService.get(productId);
+        if (productoOptional.isPresent()) {
+            Usuario usuario = usuarioService.findById(userId).orElse(null);
+            if (usuario != null) {
+                // Verificar si el usuario ya ha dado like al producto
+                boolean hasLiked = likeService.hasLiked(productoOptional.get(), usuario);
+                if (hasLiked) {
+                    return "¡Este producto ya ha sido likeado por ti!";
+                } else {
+                    likeService.toggleLike(productoOptional.get(), usuario);
+                    return "Like dado correctamente";
+                }
+            }
+        }
+        return "Producto no encontrado";
+    }
+
 
 }

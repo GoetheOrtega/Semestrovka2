@@ -1,41 +1,55 @@
 /* Fondo estilo elegante */
 body {
-    background: linear-gradient(to bottom right, #7f0000, #ff4343); /* Paleta de colores rojizos */
-    color: #333; /* Color de texto gris oscuro */
+    background: linear-gradient(to bottom right, #2c2c2c, #5a5a5a); /* Paleta de colores negros y plateados */
+    color: #a9a9a9; /* Color de texto gris oscuro */
     font-family: 'Courier New', Courier, monospace;
 }
 
 /* Estilo del Navbar */
 .navbar {
-    background-color: rgba(127, 0, 0, 0.8) !important; /* Fondo transparente con opacidad */
+    background-color: rgba(44, 44, 44, 0.8) !important; /* Fondo negro transparente con opacidad */
 }
 
 .navbar-brand, .navbar-nav .nav-link {
-    color: #333 !important; /* Color de texto gris oscuro */
+    color: #b0b0b0 !important; /* Color de texto gris oscuro */
     font-size: 24px;
 }
 
 .navbar-brand:hover, .navbar-nav .nav-link:hover {
-    color: #ff0 !important; /* Color amarillo al pasar el ratón */
+    color: #ffd700 !important; /* Color dorado al pasar el ratón */
 }
 
 /* Botones */
 .btn-outline-success {
-    color: #333; /* Color de texto gris oscuro */
-    border-color: #ffd700; /* Color de borde dorado */
+    color: #a9a9a9; /* Color de texto gris oscuro */
+    border-color: #c0c0c0; /* Color de borde plateado */
     font-weight: bold;
     transition: all 0.3s ease;
 }
 
 .btn-outline-success:hover {
-    color: #333;
-    background-color: #ffd700; /* Fondo dorado al pasar el ratón */
-    border-color: #ffd700; /* Borde dorado al pasar el ratón */
+    color: #2c2c2c;
+    background-color: #c0c0c0; /* Fondo plateado al pasar el ratón */
+    border-color: #c0c0c0; /* Borde plateado al pasar el ratón */
 }
 
 /* Footer */
 footer {
-    background-color: rgba(127, 0, 0, 0.8) !important; /* Fondo transparente con opacidad */
-    color: #333 !important; /* Color de texto gris oscuro */
+    background-color: rgba(44, 44, 44, 0.8) !important; /* Fondo negro transparente con opacidad */
+    color: #a9a9a9 !important; /* Color de texto gris oscuro */
     font-size: 18px;
+}
+
+/* Estilos personalizados para el botón de "Like" */
+.like-button {
+    background-color: #ffd700; /* Color de fondo dorado */
+    border-color: #ffd700; /* Color del borde dorado */
+    color: #2c2c2c; /* Color del texto negro */
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+
+.like-button:hover {
+    background-color: #ffeb3b; /* Cambiar el color de fondo al pasar el mouse */
+    border-color: #ffeb3b; /* Cambiar el color del borde al pasar el mouse */
+    color: #2c2c2c; /* Mantener el color del texto al pasar el mouse */
 }

@@ -4,6 +4,7 @@ import com.example.semestrovka2.model.DetalleOrden;
 
 public interface DetalleOrdenService {
     DetalleOrden save (DetalleOrden detalleOrden);
-
+    void deleteByProductoId(Integer productoId);
 }
+
 
